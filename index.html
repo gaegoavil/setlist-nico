@@ -1,0 +1,1431 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#fff0f6">
+<title>Setlist para Nico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://lrclib.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Jua&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
+<style>
+/* Layout: a phone-first music app. The setlist is the home; each song opens with the video on top
+   (or on the left on wide screens) and its lyrics scrolling beside it. Lines Gio dedicates carry a
+   heart: when they play, a flashback card opens and then flies into "tu rincón", the corner pocket.
+   Same visual world as the apology playlist (pink sky, kittens, handwriting), on purpose. */
+:root{
+  --bg:#fff0f6;
+  --bg-2:#ffe2ef;
+  --card:#ffffff;
+  --paper:#fffaf3;
+  --petal:#ffc4dc;
+  --petal-2:#ffe0ed;
+  --petal-3:#ffb0cf;
+  --rose:#ff6fa5;
+  --rose-deep:#c92f6d;
+  --berry:#7d1d4c;
+  --ink:#4b2238;
+  --ink-soft:#86566d;
+  --lilac:#a679ea;
+  --lilac-deep:#7044b8;
+  --lilac-soft:#ece2ff;
+  --cat:#fffaf6;
+  --cat-line:#5a2a40;
+  --on-rose:#ffffff;
+  --line:rgba(201,47,109,.18);
+  --shadow:rgba(125,29,76,.32);
+  --scrim:rgba(70,16,44,.74);
+  --f-display:"Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
+  --f-body:"Nunito", system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-hand:"Patrick Hand", "Comic Sans MS", cursive;
+  --f-kr:"Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+html{background:var(--bg)}
+body{
+  min-height:100%;
+  background:var(--bg);
+  color:var(--ink);
+  font:400 1rem/1.55 var(--f-body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+img{max-width:100%}
+[hidden]{display:none !important}
+button{font:inherit; color:inherit}
+p{margin:0}
+h1,h2,h3{margin:0; font-family:var(--f-display); color:var(--berry); line-height:1.08; text-wrap:balance}
+:focus-visible{outline:3px solid var(--lilac); outline-offset:3px}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+.blobs{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(40rem 22rem at 110% -5%, var(--lilac-soft), transparent 70%),
+    radial-gradient(30rem 20rem at -15% 105%, var(--bg-2), transparent 70%);
+}
+#ambient,#fx{position:fixed; inset:0; width:100%; height:100%; pointer-events:none}
+#ambient{z-index:0}
+#fx{z-index:90}
+
+.app{position:relative; z-index:2; margin:0 auto; padding-block:calc(14px + env(safe-area-inset-top, 0px)) 7rem}
+.view{display:none}
+.view.active{display:block; animation:viewIn .5s cubic-bezier(.2,.8,.2,1) both}
+
+.eyebrow{font:800 .74rem/1 var(--f-body); letter-spacing:.16em; text-transform:uppercase; color:var(--rose-deep)}
+.kr{font:400 1.6rem/1 var(--f-kr); color:var(--lilac-deep)}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font:600 1rem/1 var(--f-display); text-decoration:none; cursor:pointer;
+  padding:.9rem 1.35rem; border-radius:999px;
+  border:2px solid var(--rose-deep); background:var(--card); color:var(--rose-deep);
+  box-shadow:0 4px 0 var(--petal);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(2px); box-shadow:0 1px 0 var(--petal)}
+.btn.primary{background:var(--rose-deep); color:var(--on-rose); box-shadow:0 5px 0 var(--berry)}
+.btn.primary:active{box-shadow:0 1px 0 var(--berry)}
+.btn.small{padding:.6rem .95rem; font-size:.9rem}
+.btn:disabled{opacity:.4; cursor:default; transform:none}
+.btn svg{width:1.05em; height:1.05em; fill:currentColor}
+.link{background:none; border:0; padding:.35rem .2rem; cursor:pointer; color:var(--rose-deep); font:700 .88rem/1.2 var(--f-body); text-decoration:underline; text-underline-offset:3px}
+
+/* ---------- Setlist (home) ---------- */
+.home{max-width:34rem; margin:0 auto; display:flex; flex-direction:column; gap:1.4rem}
+.hero{display:flex; flex-direction:column; align-items:center; text-align:center; gap:.85rem}
+.hero-photo{
+  position:relative; margin:0; width:100%; aspect-ratio:960/507; max-width:100%;
+  border-radius:22px; overflow:hidden; background:linear-gradient(150deg, var(--petal), var(--lilac-soft));
+  box-shadow:0 22px 40px -24px var(--shadow); rotate:-1.2deg;
+}
+.hero-photo img{display:block; width:100%; height:100%; object-fit:cover}
+.hero-photo::after{content:""; position:absolute; inset:0; background:linear-gradient(to top, var(--scrim), transparent 55%)}
+.hero-photo figcaption{position:absolute; left:1rem; right:1rem; bottom:.8rem; z-index:1; text-align:left; color:var(--on-rose); font:400 1.15rem/1.1 var(--f-hand)}
+.hero h1{font-weight:700; font-size:clamp(2.2rem, 10vw, 3rem)}
+.hero .lead{max-width:28rem; color:var(--ink-soft)}
+.hero .row{display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center}
+
+.setlist{list-style:none; margin:0; padding:.4rem; background:var(--card); border-radius:24px; box-shadow:0 18px 36px -26px var(--shadow)}
+.setlist li + li{border-top:1px solid var(--line)}
+.track-btn{
+  width:100%; display:grid; grid-template-columns:2.6rem 3.2rem minmax(0, 1fr) auto; align-items:center; gap:.75rem;
+  padding:.65rem .55rem; border:0; background:none; border-radius:16px; cursor:pointer; text-align:left;
+  transition:background-color .2s;
+}
+.track-btn:hover{background:var(--petal-2)}
+.tb-n{font:700 .78rem/1 var(--f-display); color:var(--rose-deep); font-variant-numeric:tabular-nums; text-align:center}
+.thumb{
+  position:relative; width:3.2rem; aspect-ratio:1; border-radius:10px; overflow:hidden;
+  background:linear-gradient(145deg, var(--c1, var(--petal)), var(--c2, var(--lilac-soft)));
+  display:grid; place-items:center; box-shadow:0 6px 12px -8px var(--shadow);
+}
+.thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.thumb .cat{width:76%}
+.tb-t{min-width:0; display:flex; flex-direction:column; gap:.1rem}
+.tb-t strong{font:600 1.05rem/1.2 var(--f-display); color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.tb-t span{font-size:.82rem; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.tb-h{display:inline-flex; align-items:center; gap:.25rem; padding:.3rem .55rem; border-radius:999px; background:var(--petal-2); color:var(--rose-deep); font:700 .8rem/1 var(--f-display); font-variant-numeric:tabular-nums; white-space:nowrap}
+.tb-h svg{width:.9rem; height:.9rem; fill:none; stroke:var(--rose); stroke-width:2.4}
+.tb-h.full{background:var(--rose-deep); color:var(--on-rose)}
+.tb-h.full svg{fill:var(--on-rose); stroke:var(--on-rose)}
+.home-note{font-size:.82rem; color:var(--ink-soft); text-align:center; max-width:28rem; margin:0 auto}
+
+/* ---------- Song view ---------- */
+.song{max-width:74rem; margin:0 auto}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.8rem}
+.back{display:inline-flex; align-items:center; gap:.4rem; padding:.55rem .9rem .55rem .7rem; border-radius:999px; border:1.5px solid var(--petal-3); background:var(--card); color:var(--berry); font:600 .92rem/1 var(--f-display); cursor:pointer}
+.back svg{width:1rem; height:1rem; fill:currentColor}
+.count{font:700 .74rem/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft)}
+.song-grid{display:grid; grid-template-columns:minmax(0, 1fr); gap:1rem}
+.stage-col{display:flex; flex-direction:column; gap:.85rem; min-width:0}
+
+.video-box{
+  position:relative; width:100%; aspect-ratio:16/9; max-width:100%;
+  border-radius:20px; overflow:hidden; background:var(--berry);
+  box-shadow:0 20px 40px -22px var(--shadow);
+}
+#yt{position:absolute; inset:0; width:100%; height:100%; border:0}
+.tap-hint{
+  position:absolute; left:50%; bottom:12%; translate:-50% 0; z-index:2; pointer-events:none;
+  padding:.5rem .9rem; border-radius:999px; background:var(--card); color:var(--berry);
+  font:600 .92rem/1.2 var(--f-display); box-shadow:0 10px 20px -10px var(--shadow); white-space:nowrap;
+  animation:float 2.4s ease-in-out infinite;
+}
+.alt{
+  display:flex; flex-direction:column; gap:.7rem; padding:1.1rem 1.1rem 1.2rem;
+  background:linear-gradient(150deg, var(--petal), var(--lilac-soft)); color:var(--ink); text-align:left;
+}
+/* With no video, the box takes the height of what it says instead of 16:9. */
+.video-box.is-alt{aspect-ratio:auto; background:var(--petal)}
+.video-box.is-alt #yt{display:none}
+.alt p{font-size:.9rem; line-height:1.4}
+.alt strong{font:600 1.1rem/1.2 var(--f-display); color:var(--berry)}
+.alt .row{display:flex; flex-wrap:wrap; gap:.5rem; align-items:center}
+
+.meta{display:grid; grid-template-columns:4rem minmax(0, 1fr); gap:.85rem; align-items:center}
+.meta .thumb{width:4rem; border-radius:12px}
+.meta h2{font-weight:600; font-size:clamp(1.5rem, 6vw, 1.95rem)}
+.meta .artist{font-size:.88rem; color:var(--ink-soft); font-weight:600}
+.badges{display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.35rem}
+.badge{padding:.25rem .55rem; border-radius:999px; background:var(--lilac-soft); color:var(--lilac-deep); font:700 .72rem/1.2 var(--f-body)}
+.badge.warm{background:var(--petal-2); color:var(--rose-deep)}
+
+.timeline{position:relative; height:1.6rem; cursor:pointer; touch-action:none}
+.timeline .rail{position:absolute; left:0; right:0; top:50%; height:6px; translate:0 -50%; border-radius:99px; background:var(--petal-2); overflow:hidden}
+.timeline .fill{height:100%; width:0; background:linear-gradient(90deg, var(--rose), var(--lilac))}
+.timeline .mark{position:absolute; top:50%; width:1.05rem; height:1.05rem; translate:-50% -50%; pointer-events:none}
+.timeline .mark svg{width:100%; height:100%; fill:var(--card); stroke:var(--rose); stroke-width:2.6}
+.timeline .mark.got svg{fill:var(--rose)}
+.times{display:flex; justify-content:space-between; margin-top:-.35rem; font:700 .74rem/1 var(--f-body); color:var(--ink-soft); font-variant-numeric:tabular-nums}
+.controls{display:flex; flex-wrap:wrap; gap:.55rem; justify-content:space-between; align-items:center}
+.controls .group{display:flex; gap:.5rem}
+.sync{font-size:.82rem; color:var(--ink-soft)}
+.sync summary{cursor:pointer; list-style:none; font-weight:700; color:var(--ink-soft); text-decoration:underline; text-underline-offset:3px; width:fit-content}
+.sync summary::-webkit-details-marker{display:none}
+.sync .row{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin-top:.5rem}
+.sync output{min-width:4.6rem; text-align:center; font:700 .9rem/1 var(--f-display); color:var(--berry); font-variant-numeric:tabular-nums}
+
+.lyrics-col{position:relative; min-width:0; display:flex; flex-direction:column; background:var(--card); border-radius:24px; box-shadow:0 18px 36px -26px var(--shadow)}
+.lyrics-head{display:flex; align-items:center; justify-content:space-between; gap:.8rem; padding:.95rem 1.1rem .4rem}
+.lyrics-head .eyebrow{color:var(--rose-deep)}
+.toggle{display:inline-flex; align-items:center; gap:.45rem; padding:.4rem .7rem; border-radius:999px; border:1.5px solid var(--petal-3); background:var(--card); color:var(--berry); font:700 .8rem/1 var(--f-body); cursor:pointer}
+.toggle i{display:block; width:1.9rem; height:1.05rem; border-radius:99px; background:var(--petal-2); position:relative; transition:background-color .2s}
+.toggle i::after{content:""; position:absolute; top:.15rem; left:.15rem; width:.75rem; height:.75rem; border-radius:50%; background:var(--card); box-shadow:0 1px 3px var(--shadow); transition:transform .2s}
+.toggle[aria-pressed="true"] i{background:var(--rose)}
+.toggle[aria-pressed="true"] i::after{transform:translateX(.85rem)}
+.lyrics{
+  list-style:none; margin:0; padding:2rem 1.1rem 45%;
+  height:clamp(18rem, calc(100svh - 56.25vw - 15rem), 34rem);
+  overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scroll-behavior:auto;
+  scrollbar-width:thin; scrollbar-color:var(--petal-3) transparent;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 88%, transparent 100%);
+          mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 88%, transparent 100%);
+}
+.ly{position:relative; padding:.38rem .5rem .38rem .55rem; border-radius:12px; cursor:pointer; transition:opacity .35s, transform .35s, background-color .35s; transform-origin:left center; opacity:.42}
+.ly + .ly{margin-top:.15rem}
+.ly.past{opacity:.6}
+.ly.next{opacity:.72}
+.ly.now{opacity:1; transform:scale(1.035)}
+.ly:hover{background:var(--petal-2)}
+.ly-txt{display:block; font:700 1.08rem/1.35 var(--f-body); color:var(--ink); overflow-wrap:anywhere}
+.ly.now .ly-txt{color:var(--berry)}
+.ly-rom{display:block; margin-top:.05rem; font:600 .84rem/1.3 var(--f-body); color:var(--lilac-deep); font-style:italic; overflow-wrap:anywhere}
+.no-rom .ly-rom{display:none}
+.ly.gap{cursor:default; text-align:center; font:400 1.1rem/1 var(--f-display); color:var(--petal-3)}
+.ly.gap:hover{background:none}
+.ly.ded{padding-right:2.1rem; background:linear-gradient(90deg, var(--petal-2), transparent 85%)}
+.ly .heart{position:absolute; right:.5rem; top:.55rem; width:1.15rem; height:1.15rem; fill:var(--card); stroke:var(--rose); stroke-width:2.4}
+.ly.got .heart{fill:var(--rose)}
+.ly.now.ded .heart{animation:beat .6s ease-in-out infinite alternate}
+.lyrics-status{padding:0 1.1rem 1rem; font-size:.86rem; color:var(--ink-soft)}
+.lyrics-status:empty{display:none}
+.lyrics-status .link{font-size:.86rem}
+.countdown{position:absolute; inset:0; z-index:4; display:grid; place-items:center; border-radius:24px; background:color-mix(in srgb, var(--card) 88%, transparent)}
+.countdown span{font:700 clamp(5rem, 22vw, 8rem)/1 var(--f-display); color:var(--rose-deep); animation:countPop .9s ease both}
+
+/* On a phone the video and the lyrics share the first screen; title and controls go below. */
+@media (max-width: 59.99rem){
+  .song-grid{gap:.85rem}
+  .stage-col{display:contents}
+  .video-box{order:1}
+  .lyrics-col{order:2}
+  .meta{order:3}
+  .tl-wrap{order:4}
+  .controls{order:5}
+  .sync{order:6}
+  .lyrics{height:clamp(15rem, calc(100svh - 56.25vw - 10.5rem), 30rem)}
+}
+@media (min-width: 60rem){
+  .song-grid{grid-template-columns:minmax(0, 1.05fr) minmax(0, 1fr); gap:1.6rem; align-items:start}
+  .stage-col{position:sticky; top:calc(14px + env(safe-area-inset-top, 0px))}
+  .lyrics{height:min(36rem, calc(100svh - 9rem))}
+}
+
+/* ---------- Corner pocket ("tu rincón") ---------- */
+.pocket{
+  position:fixed; z-index:60;
+  right:max(14px, env(safe-area-inset-right, 0px));
+  bottom:calc(14px + env(safe-area-inset-bottom, 0px));
+  display:flex; align-items:center; gap:.55rem; padding:.45rem .9rem .45rem .45rem;
+  border:0; border-radius:999px; cursor:pointer;
+  background:var(--card); color:var(--berry); box-shadow:0 14px 30px -12px var(--shadow);
+  animation:pocketIn .6s cubic-bezier(.3,1.4,.5,1) both;
+}
+.pocket .env{position:relative; display:grid; place-items:center; width:2.6rem; height:2.6rem; border-radius:50%; background:var(--rose-deep)}
+.pocket .env svg{width:1.3rem; height:1.3rem; fill:var(--on-rose)}
+.pocket .txt{display:flex; flex-direction:column; text-align:left; line-height:1.1}
+.pocket .txt strong{font:600 .95rem/1.1 var(--f-display)}
+.pocket .txt span{font:700 .75rem/1.2 var(--f-body); color:var(--ink-soft); font-variant-numeric:tabular-nums}
+.pocket.bump .env{animation:pop .5s ease}
+
+.sheet{position:fixed; inset:0; z-index:80; display:flex; align-items:flex-end; justify-content:center; background:var(--scrim); animation:fade .3s ease both}
+.sheet-panel{
+  width:min(44rem, 100%); max-height:88svh; overflow:auto; overscroll-behavior:contain;
+  padding:1.2rem max(16px, env(safe-area-inset-right, 0px)) calc(1.4rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  border-radius:26px 26px 0 0; background:var(--bg); box-shadow:0 -20px 40px -20px var(--shadow);
+  animation:sheetUp .45s cubic-bezier(.2,.8,.2,1) both;
+}
+.sheet-head{display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:.9rem}
+.sheet-head h2{font-size:clamp(1.5rem, 6vw, 1.9rem)}
+.sheet-head p{color:var(--ink-soft); font-size:.92rem; margin-top:.3rem}
+.close{flex:none; display:grid; place-items:center; width:2.6rem; height:2.6rem; border-radius:50%; border:1.5px solid var(--petal-3); background:var(--card); color:var(--berry); cursor:pointer}
+.close svg{width:1rem; height:1rem; fill:currentColor}
+.cards{display:grid; grid-template-columns:repeat(auto-fill, minmax(13.5rem, 1fr)); gap:.9rem}
+.memo{position:relative; height:12.5rem; padding:0; border:0; background:none; cursor:pointer; perspective:900px; text-align:left}
+.memo:nth-child(odd){rotate:-1deg}
+.memo:nth-child(even){rotate:1deg}
+.memo-inner{position:relative; display:block; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s cubic-bezier(.3,1.3,.5,1)}
+.memo[aria-pressed="true"] .memo-inner{transform:rotateY(180deg)}
+.memo-front,.memo-back{
+  position:absolute; inset:0; display:flex; flex-direction:column; gap:.35rem; padding:.95rem 1rem;
+  border-radius:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden;
+  box-shadow:0 12px 24px -16px var(--shadow);
+}
+.memo-front{background:var(--paper); border:1.5px solid var(--petal-3)}
+.memo-front::after{content:""; position:absolute; top:-8px; left:50%; width:3.2rem; height:1.1rem; translate:-50% 0; rotate:-3deg; border-radius:2px; background:var(--petal); opacity:.9}
+.memo-back{transform:rotateY(180deg); background:linear-gradient(150deg, var(--rose), var(--lilac)); color:var(--on-rose)}
+.memo-n{font:800 .66rem/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; color:var(--rose-deep)}
+.memo-kr{font:400 1.02rem/1.1 var(--f-kr); color:var(--lilac-deep)}
+.memo-frase{font:400 1.22rem/1.2 var(--f-hand); color:var(--ink); overflow:hidden; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical}
+.memo-sign{margin-top:auto; font:400 1rem/1 var(--f-hand); color:var(--rose-deep); text-align:right}
+.memo-back small{font:800 .66rem/1 var(--f-body); letter-spacing:.14em; text-transform:uppercase; opacity:.9}
+.memo-back strong{font:600 1.15rem/1.15 var(--f-display)}
+.memo-back .verso{font:700 .9rem/1.3 var(--f-body); overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical}
+.memo-back .idea{font-size:.8rem; line-height:1.35; opacity:.95; overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical}
+.locked{
+  display:flex; flex-direction:column; justify-content:center; gap:.45rem; min-height:8rem; padding:1rem;
+  border:2px dashed var(--petal-3); border-radius:16px; color:var(--ink-soft); text-align:left;
+}
+.locked strong{font:400 1.2rem/1.2 var(--f-hand); color:var(--berry)}
+.locked span{font-size:.84rem}
+.locked .btn{align-self:flex-start; margin-top:.2rem}
+.sheet-foot{margin-top:1.2rem; display:flex; flex-direction:column; align-items:center; gap:.4rem; text-align:center}
+.sheet-foot .sign{font:400 1.7rem/1 var(--f-hand); color:var(--berry)}
+
+/* ---------- Flashback ---------- */
+.flash{position:fixed; inset:0; z-index:85; display:grid; place-items:center; padding:1.2rem max(16px, env(safe-area-inset-right, 0px)) 1.2rem max(16px, env(safe-area-inset-left, 0px))}
+.flash-bg{position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(70,16,44,.35) 0%, var(--scrim) 100%); animation:fade .5s ease both}
+.flash-bg::before{content:""; position:absolute; inset:0; background:var(--paper); opacity:0; animation:flashWhite .9s ease both}
+.flash-bg::after{
+  content:""; position:absolute; inset:-50%; opacity:.09; pointer-events:none;
+  background-image:repeating-radial-gradient(circle at 17% 32%, var(--on-rose) 0 1px, transparent 1px 3px);
+  animation:grain .45s steps(3) infinite;
+}
+.flash-card{
+  position:relative; width:min(25rem, 100%); max-height:calc(100svh - 2.4rem); overflow:auto;
+  display:flex; flex-direction:column; gap:.6rem; padding:1.1rem 1.2rem 1.25rem;
+  border-radius:8px; background:var(--paper); color:var(--ink);
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+  animation:develop 1.3s ease both; rotate:-1.5deg;
+}
+.flash-top{display:flex; justify-content:space-between; gap:.8rem; align-items:baseline}
+.flash-top .eyebrow{color:var(--rose-deep)}
+.flash-top span{font:700 .74rem/1 var(--f-body); color:var(--ink-soft); font-variant-numeric:tabular-nums}
+.flash-verse{padding:.75rem .85rem; border-radius:6px; background:linear-gradient(150deg, var(--petal-2), var(--lilac-soft))}
+.flash-verse p:first-child{font:700 1.1rem/1.35 var(--f-body); color:var(--berry); overflow-wrap:anywhere}
+.flash-verse .rom{margin-top:.15rem; font:600 .85rem/1.3 var(--f-body); font-style:italic; color:var(--lilac-deep)}
+.flash-verse .idea{margin-top:.45rem; font-size:.85rem; line-height:1.4; color:var(--ink-soft)}
+.flash-kr{font:400 1.3rem/1.1 var(--f-kr); color:var(--lilac-deep)}
+.flash-frase{font:400 clamp(1.45rem, 6.5vw, 1.75rem)/1.18 var(--f-hand); color:var(--ink)}
+.flash-sign{font:400 1.15rem/1 var(--f-hand); color:var(--rose-deep); text-align:right}
+.flash-card .btn{align-self:center; margin-top:.2rem}
+.ghost{
+  position:fixed; z-index:88; pointer-events:none; max-width:18rem;
+  padding:.6rem .85rem; border-radius:10px; transform-origin:top left;
+  background:var(--paper); color:var(--ink); font:400 1.15rem/1.2 var(--f-hand);
+  box-shadow:0 18px 30px -14px var(--shadow);
+}
+
+.toast{
+  position:fixed; z-index:70; left:50%; top:calc(14px + env(safe-area-inset-top, 0px)); translate:-50% 0;
+  max-width:calc(100% - 32px); padding:.55rem 1.05rem; border-radius:999px;
+  background:var(--berry); color:var(--on-rose); font:600 .95rem/1.25 var(--f-display); text-align:center;
+  box-shadow:0 12px 26px -14px var(--shadow); animation:toast 3.2s ease forwards;
+}
+
+.cat svg{display:block; width:100%; height:auto; overflow:visible}
+
+@keyframes viewIn{from{opacity:0; transform:translateY(14px)}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes pop{50%{transform:scale(1.28)}}
+@keyframes beat{from{transform:scale(.9)} to{transform:scale(1.18)}}
+@keyframes fade{from{opacity:0}}
+@keyframes flashWhite{0%{opacity:.85} 100%{opacity:0}}
+@keyframes grain{0%{transform:translate(0,0)} 33%{transform:translate(-3%,2%)} 66%{transform:translate(2%,-3%)} 100%{transform:translate(0,0)}}
+@keyframes develop{0%{filter:sepia(1) blur(6px) brightness(1.4); transform:scale(.9) translateY(20px); opacity:0} 45%{filter:sepia(.7) blur(1px); opacity:1} 100%{filter:none; transform:none}}
+@keyframes sheetUp{from{transform:translateY(40%); opacity:.4}}
+@keyframes pocketIn{from{transform:translateY(30px) scale(.8); opacity:0}}
+@keyframes countPop{0%{opacity:0; transform:scale(.4)} 30%{opacity:1; transform:scale(1.08)} 75%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(1.25)}}
+@keyframes toast{0%{opacity:0; transform:translateY(-10px)} 10%{opacity:1; transform:none} 85%{opacity:1} 100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+<div class="blobs" aria-hidden="true"></div>
+<canvas id="ambient" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<main class="app">
+
+  <!-- Home: the setlist -->
+  <section class="view active" id="v-home" aria-labelledby="home-title">
+    <div class="home">
+      <header class="hero">
+        <figure class="hero-photo">
+          <img src="fotos/portada.jpg" width="960" height="507" alt="Nico y Gio de espaldas en la playa, frente al letrero de luces que dice «Quieres ser mi novia»">
+          <figcaption>Nuestra playa</figcaption>
+        </figure>
+        <p class="eyebrow">Playlist de Gio</p>
+        <h1 id="home-title" tabindex="-1">Setlist para Nico</h1>
+        <p class="kr" lang="ko">니코에게</p>
+        <p class="lead">Diez canciones que elegí para ti. Mientras suena cada una, la letra va al lado. Los versos con corazón son los que te dedico: cuando llegan, se guardan en tu rincón, abajo a la derecha.</p>
+        <p class="lead">No tienes que escucharlas todas de una vez.</p>
+        <div class="row">
+          <button class="btn primary" id="empezar" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+            Empezar por la intro
+          </button>
+        </div>
+      </header>
+      <ol class="setlist" id="setlist" aria-label="Canciones"></ol>
+      <p class="home-note">Las letras llegan de lrclib.net y los videos son de YouTube. Sube el volumen.</p>
+    </div>
+  </section>
+
+  <!-- One song -->
+  <section class="view" id="v-song" aria-labelledby="s-title">
+    <div class="song">
+      <div class="topbar">
+        <button class="back" id="volver" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg>
+          Setlist
+        </button>
+        <p class="count" id="s-count"></p>
+      </div>
+      <div class="song-grid">
+        <div class="stage-col">
+          <div class="video-box" id="video-box">
+            <div id="yt"></div>
+            <p class="tap-hint" id="tap-hint" hidden>Toca ▶ en el video</p>
+            <div class="alt" id="alt" hidden>
+              <strong id="alt-title"></strong>
+              <p id="alt-text"></p>
+            </div>
+          </div>
+          <div class="meta">
+            <span class="thumb" id="s-thumb"></span>
+            <div>
+              <h2 id="s-title" tabindex="-1"></h2>
+              <p class="artist" id="s-artist"></p>
+              <div class="badges" id="s-badges"></div>
+            </div>
+          </div>
+          <div class="tl-wrap">
+            <div class="timeline" id="timeline" role="slider" tabindex="0" aria-label="Posición de la canción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="rail"><div class="fill" id="tl-fill"></div></div>
+            </div>
+            <p class="times" aria-hidden="true"><span id="t-cur">0:00</span><span id="t-dur"></span></p>
+          </div>
+          <div class="controls">
+            <div class="group">
+              <button class="btn small" id="prev" type="button">Anterior</button>
+              <button class="btn small primary" id="next" type="button">Siguiente</button>
+            </div>
+            <div class="group" id="manual-ctrls" hidden>
+              <button class="btn small primary" id="m-start" type="button">Empezar la letra</button>
+              <button class="btn small" id="m-pause" type="button" hidden>Pausar</button>
+            </div>
+          </div>
+          <details class="sync" id="sync">
+            <summary>¿La letra no va a tiempo?</summary>
+            <div class="row">
+              <button class="btn small" id="adj-minus" type="button" aria-label="Que la letra vaya un cuarto de segundo después">Después</button>
+              <output id="adj-out" aria-live="polite">a tiempo</output>
+              <button class="btn small" id="adj-plus" type="button" aria-label="Que la letra vaya un cuarto de segundo antes">Antes</button>
+            </div>
+          </details>
+        </div>
+
+        <div class="lyrics-col">
+          <div class="lyrics-head">
+            <p class="eyebrow">Letra</p>
+            <button class="toggle" id="rom" type="button" aria-pressed="true">Pronunciación <i aria-hidden="true"></i></button>
+          </div>
+          <ol class="lyrics" id="lyrics" aria-label="Letra de la canción"></ol>
+          <p class="lyrics-status" id="l-status" aria-live="polite"></p>
+          <div class="countdown" id="countdown" hidden aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="pocket" id="pocket" type="button" aria-haspopup="dialog">
+  <span class="env" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C1 8.6 3 5 6.6 5c2.1 0 3.6 1.1 4.4 2.6h2C13.8 6.1 15.3 5 17.4 5 21 5 23 8.6 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg></span>
+  <span class="txt"><strong>Tu rincón</strong><span id="pocket-count">0 de 0</span></span>
+</button>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+  <div class="sheet-panel" id="sheet-panel">
+    <div class="sheet-head">
+      <div>
+        <h2 id="sheet-title" tabindex="-1">Tu rincón</h2>
+        <p id="sheet-sub"></p>
+      </div>
+      <button class="close" id="sheet-close" type="button" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 7.1 16.9 5.7 12 10.6 7.1 5.7 5.7 7.1l4.9 4.9-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"/></svg>
+      </button>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="sheet-foot" id="sheet-foot" hidden>
+      <p class="sign">Con cariño, Gio</p>
+    </div>
+  </div>
+</div>
+
+<div class="flash" id="flash" role="dialog" aria-modal="false" aria-labelledby="fl-frase" hidden>
+  <div class="flash-bg" id="flash-bg"></div>
+  <div class="flash-card" id="flash-card">
+    <div class="flash-top"><p class="eyebrow">Flashback</p><span id="fl-where"></span></div>
+    <div class="flash-verse" id="fl-verse">
+      <p id="fl-line"></p>
+      <p class="rom" id="fl-rom"></p>
+      <p class="idea" id="fl-idea"></p>
+    </div>
+    <p class="flash-kr" id="fl-kr" lang="ko"></p>
+    <p class="flash-frase" id="fl-frase"></p>
+    <p class="flash-sign">Gio</p>
+    <button class="btn small primary" id="fl-save" type="button">Guardar en tu rincón</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ================= The setlist =================
+  // `t` is the second of the album recording where the dedicated line starts (lrclib timing).
+  // `idea` describes in a few words what that part of the song talks about; it is not a translation.
+  // `frase` is Gio's own words.
+  var SONGS = [
+    { slug: 'ditto', n: 'Intro', title: 'Ditto', artist: 'NewJeans', album: 'OMG', year: 2022, dur: 185.5,
+      c1: '#cfe3ff', c2: '#ffd6e8', cat: 'calm',
+      video: 'kdy4rb4u-XA', kind: 'sub', backups: ['6GkY5P9FedI', 'OGsViecQuVY', '9obnUYwHErQ'],
+      lrclib: [34051054, 34661088, 36385551],
+      ded: [
+        { t: 59.13, kr: '보고 싶어', idea: 'Habla de un día largo y de las ganas de ver a alguien.',
+          frase: 'Extrañé nuestras conversaciones de todos los días.' }
+      ] },
+    { slug: 'blue-grey', n: '01', title: 'Blue & Grey', artist: 'BTS', album: 'BE', year: 2020, dur: 254.95,
+      cover: 'fotos/01.jpg', c1: '#cfd3e0', c2: '#b8bed6', cat: 'sad',
+      video: 'pFNkMGrfdc8', kind: 'sub', backups: ['hphcvOrhtTs', 'amnspvOH-EE'],
+      lrclib: [12072880, 12407015, 13627606],
+      ded: [
+        { t: 34.51, kr: '요즘 다 회색이었어', idea: 'Habla de estar triste y de pedir que alguien lo vea así.',
+          frase: 'Estos días todo se veía gris. Y no era el clima: era yo, cargando lo que hice.' }
+      ] },
+    { slug: 'truth-untold', n: '02', title: 'The Truth Untold', artist: 'BTS feat. Steve Aoki', album: 'Love Yourself: Tear', year: 2018, dur: 242.3,
+      cover: 'fotos/02.jpg', c1: '#d6d0e4', c2: '#c3b6dc', cat: 'sad',
+      video: 'kNyP1ktCshQ', kind: 'sub', backups: ['ITc-om9SVr4'],
+      lrclib: [2403301, 32000837, 19892781],
+      ded: [
+        { t: 77.76, kr: '미안해, 니코', idea: 'Habla de ponerse una máscara para ir a ver a quien quiere.',
+          frase: 'Te dije que fui a dos conciertos. Fui a los tres. No hay excusa, Nico. Lo siento.' },
+        { t: 103.37, idea: 'Aquí se quita esa máscara.',
+          frase: 'Prefiero una verdad incómoda a una mentira cómoda.' }
+      ] },
+    { slug: 'fake-love', n: '03', title: 'Fake Love', artist: 'BTS', album: 'Love Yourself: Tear', year: 2018, dur: 242.36,
+      cover: 'fotos/03.jpg', c1: '#efc9d8', c2: '#d9a3bd', cat: 'calm',
+      video: '0tWU94w_3ig', kind: 'official', backups: [],
+      lrclib: [20758104, 19432163, 20423639],
+      ded: [
+        { t: 62.34, idea: 'Habla de fingir que todo está bien, por la otra persona.',
+          frase: 'Quise parecer perfecto para ti. Y por cuidar esa imagen, te escondí cosas.' },
+        { t: 124.46, kr: '내 잘못이야', idea: 'Aquí preguntan por qué está triste, y no saben qué responder.',
+          frase: 'Quiero que algo te quede claro: la culpa fue mía. No tuya. No fuiste intensa de más.' }
+      ] },
+    { slug: 'spring-day', n: '04', title: 'Spring Day', artist: 'BTS', album: 'You Never Walk Alone', year: 2017, dur: 274.5,
+      cover: 'fotos/04.jpg', c1: '#f6e1ea', c2: '#d8e7f6', cat: 'calm',
+      video: 'Mqg1DLZuMaA', kind: 'sub', backups: [],
+      lrclib: [3674742, 942431, 28099078],
+      ded: [
+        { t: 17.16, kr: '보고 싶어', idea: 'Empieza diciendo que extraña a alguien.',
+          frase: 'Te extraño, Nico.' },
+        { t: 88.52, kr: '기다릴게', idea: 'Pregunta cuánto más le toca esperar.',
+          frase: 'Si necesitas tiempo, te espero.' }
+      ] },
+    { slug: 'magic-shop', n: '05', title: 'Magic Shop', artist: 'BTS', album: 'Love Yourself: Tear', year: 2018, dur: 275.72,
+      cover: 'fotos/05.jpg', c1: '#f1e0f8', c2: '#f0c4d8', cat: 'calm',
+      video: 'BS3SBxLVwa0', kind: 'sub', backups: ['RCt5YJiaX1c', '38k5zr1e0HI'],
+      lrclib: [21294212, 1026386, 22068758],
+      ded: [
+        { t: 87.82, kr: '넌 잠깐 머무는 곳이 아니야', idea: 'Aquí la canción habla de un lugar seguro, al que se puede llegar cuando todo pesa.',
+          frase: 'No eres un lugar de paso. Quiero ser yo también un lugar seguro para ti.' }
+      ] },
+    { slug: 'make-it-right', n: '06', title: 'Make It Right', artist: 'BTS', album: 'Map of the Soul: Persona', year: 2019, dur: 226.4,
+      cover: 'fotos/06.jpg', c1: '#ffd9e8', c2: '#ffb3cf', cat: 'happy',
+      video: 'eyDDaHA5-1o', kind: 'sub', backups: ['ewvdkDaJV8M', '_P9QgYytfac'],
+      lrclib: [1009035, 20501265, 19829428],
+      ded: [
+        { t: 60.54, idea: 'Repite que puede arreglarlo.',
+          frase: 'La culpa no se quita con palabras grandes. Se arregla con cosas chiquitas, todos los días.' },
+        { t: 150.87, kr: '말보다 행동', idea: 'Lo vuelve a decir.',
+          frase: 'Decirte la verdad aunque te moleste. No desaparecer horas. Hechos, no promesas.' }
+      ] },
+    { slug: 'butterfly', n: '07', title: 'Butterfly', artist: 'BTS', album: 'The Most Beautiful Moment in Life Pt.2', year: 2015, dur: 238.86,
+      cover: 'fotos/07.jpg', c1: '#e4d6ff', c2: '#ffd0e6', cat: 'happy',
+      video: 'Ap4IPQfNK5Y', kind: 'sub', backups: [],
+      lrclib: [19473845, 947697, 29277452],
+      ded: [
+        { t: 32.32, idea: 'Habla de algo tan bonito que da miedo.',
+          frase: 'Lo que tenemos es bonito y frágil. Y me da miedo perderlo.' },
+        { t: 57.40, idea: 'Tiene miedo de que, si lo toca, se rompa o se vaya volando.',
+          frase: 'Por eso no te voy a presionar.' }
+      ] },
+    { slug: 'yet-to-come', n: 'Bonus', title: 'Yet To Come', artist: 'BTS', album: 'Proof', year: 2022, dur: 193.65,
+      cover: 'fotos/08.jpg', c1: '#ffd3e4', c2: '#d9c6ff', cat: 'happy',
+      video: 'YVx3ZIVvsf4', kind: 'audio', backups: ['UAg3FZKKRJI', '06sfN1NXRaY'],
+      lrclib: [1026587, 35620686, 23369237],
+      ded: [
+        { t: 14.30, idea: 'Dice que lo mejor es lo que viene.',
+          frase: 'Lo que viene quiero hacerlo bien. Sin esconderte nada.' }
+      ] },
+    // In place of Boy With Luv, which YouTube does not let any other page play.
+    { slug: 'answer', n: 'Final', title: 'Answer: Love Myself', artist: 'BTS', album: 'Love Yourself: Answer', year: 2018, dur: 251.27,
+      c1: '#ffc1d9', c2: '#ffe6b8', cat: 'happy',
+      video: 'D-1CFqSa4Hs', kind: 'sub', backups: ['kpPRbGJGljI', '9mwRYgMmSGE'],
+      lrclib: [21397522, 2387858, 32521194],
+      ded: [
+        { t: 39.00, idea: 'Habla de perdonarse a uno mismo en vez de rendirse.',
+          frase: 'No cargues con lo que hice yo. Tú no hiciste nada malo.' },
+        { t: 71.25, idea: 'Habla de alguien que le mostró razones para quererse.',
+          frase: 'Gracias por enseñarme tanto en tan poco tiempo.' },
+        { t: 245, kr: '고마워', fin: true, idea: 'Termina la canción.',
+          frase: 'Gracias por llegar hasta aquí, Nico.' }
+      ] }
+  ];
+  var KIND_LABEL = {
+    sub: ['Video con subtítulos en español', ''],
+    official: ['Audio oficial', 'warm'],
+    audio: ['Solo audio', 'warm']
+  };
+
+  // ================= Helpers =================
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rootStyle = getComputedStyle(document.documentElement);
+  function tok(name) { return rootStyle.getPropertyValue(name).trim(); }
+  function $(sel) { return document.querySelector(sel); }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function fmt(s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + pad2(s % 60); }
+  function retrigger(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  function dkey(song, d) { return song.slug + '@' + d.t; }
+  var HEART = '<path d="M12 21s-7.5-4.6-9.6-9.2C1 8.6 3 5 6.6 5c2.1 0 3.6 1.1 4.4 2.6h2C13.8 6.1 15.3 5 17.4 5 21 5 23 8.6 21.6 11.8 19.5 16.4 12 21 12 21z"/>';
+  function heartSVG(cls) { return '<svg class="' + cls + '" viewBox="0 0 24 24" aria-hidden="true">' + HEART + '</svg>'; }
+  var TOTAL = SONGS.reduce(function (a, s) { return a + s.ded.length; }, 0);
+
+  // Saved in this browser only: which dedications she already got, the pronunciation switch and timing nudges.
+  var KEY = 'setlist-nico:v1';
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { store = {}; }
+  store.saved = store.saved || {};
+  store.adj = store.adj || {};
+  if (typeof store.rom !== 'boolean') store.rom = true;
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  function savedCount() { return Object.keys(store.saved).length; }
+
+  function toast(text) {
+    var t = document.createElement('div');
+    t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = text;
+    document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 3300);
+  }
+
+  // ---------- Kitten (same one as in the playlist) ----------
+  function catSVG(mood) {
+    var line = 'stroke:var(--cat-line);stroke-width:3;stroke-linejoin:round';
+    var stroke = 'fill:none;stroke:var(--cat-line);stroke-linecap:round';
+    var sad = mood === 'sad';
+    var ears = sad
+      ? '<path d="M20 50L3 24l41 10z" style="fill:var(--cat);' + line + '"/><path d="M100 50l17-26-41 10z" style="fill:var(--cat);' + line + '"/>' +
+        '<path d="M19 41l-9-12 19 5z" style="fill:var(--petal)"/><path d="M101 41l9-12-19 5z" style="fill:var(--petal)"/>'
+      : '<path d="M16 52L24 6l30 24z" style="fill:var(--cat);' + line + '"/><path d="M104 52L96 6 66 30z" style="fill:var(--cat);' + line + '"/>' +
+        '<path d="M25 39l3-21 13 12z" style="fill:var(--petal)"/><path d="M95 39l-3-21-13 12z" style="fill:var(--petal)"/>';
+    var eyes = mood === 'happy'
+      ? '<path d="M37 63q6-8 12 0M71 63q6-8 12 0" style="' + stroke + ';stroke-width:3.5"/>'
+      : '<circle cx="43" cy="62" r="5.8" style="fill:var(--cat-line)"/><circle cx="77" cy="62" r="5.8" style="fill:var(--cat-line)"/>' +
+        '<circle cx="44.8" cy="60.2" r="1.9" style="fill:var(--cat)"/><circle cx="78.8" cy="60.2" r="1.9" style="fill:var(--cat)"/>';
+    var mouth = sad ? '<path d="M53 86q7-6 14 0" style="' + stroke + ';stroke-width:2.5"/>' : '<path d="M52 80q4 5 8 0q4 5 8 0" style="' + stroke + ';stroke-width:2.5"/>';
+    return '<svg viewBox="0 0 120 110" aria-hidden="true">' + ears +
+      '<ellipse cx="60" cy="64" rx="47" ry="40" style="fill:var(--cat);' + line + '"/>' + eyes +
+      '<ellipse cx="33" cy="76" rx="8" ry="4.5" style="fill:var(--petal)"/><ellipse cx="87" cy="76" rx="8" ry="4.5" style="fill:var(--petal)"/>' +
+      '<path d="M56 71h8l-4 5z" style="fill:var(--rose)"/>' + mouth + '</svg>';
+  }
+  function fillThumb(el, song) {
+    el.style.setProperty('--c1', song.c1);
+    el.style.setProperty('--c2', song.c2);
+    el.innerHTML = '<span class="cat">' + catSVG(song.cat) + '</span>';
+    if (song.cover) {
+      var img = new Image();
+      img.alt = ''; img.decoding = 'async';
+      img.hidden = true;
+      img.onload = function () { img.hidden = false; };
+      img.src = song.cover;
+      el.appendChild(img);
+    }
+  }
+
+  // ---------- Korean → Latin letters (revised romanization, with the common sound changes) ----------
+  var INI = ['g', 'kk', 'n', 'd', 'tt', 'r', 'm', 'b', 'pp', 's', 'ss', '', 'j', 'jj', 'ch', 'k', 't', 'p', 'h'];
+  var MED = ['a', 'ae', 'ya', 'yae', 'eo', 'e', 'yeo', 'ye', 'o', 'wa', 'wae', 'oe', 'yo', 'u', 'wo', 'we', 'wi', 'yu', 'eu', 'ui', 'i'];
+  var CODA = ['', 'k', 'k', 'k', 'n', 'n', 'n', 't', 'l', 'k', 'm', 'l', 'l', 'l', 'p', 'l', 'm', 'p', 'p', 't', 't', 'ng', 't', 't', 'k', 't', 'p', 't'];
+  // Before a syllable that starts silent (ㅇ), the final consonant moves over: [what stays, what moves].
+  var LIG = [null, ['', 'g'], ['', 'kk'], ['k', 's'], ['', 'n'], ['n', 'j'], ['', 'n'], ['', 'd'], ['', 'r'], ['l', 'g'], ['l', 'm'], ['l', 'b'], ['l', 's'], ['l', 't'], ['l', 'p'], ['', 'r'],
+    ['', 'm'], ['', 'b'], ['p', 's'], ['', 's'], ['', 'ss'], ['ng', ''], ['', 'j'], ['', 'ch'], ['', 'k'], ['', 't'], ['', 'p'], ['', '']];
+  function syllable(c) {
+    var x = c.charCodeAt(0) - 0xAC00;
+    return x >= 0 && x < 11172 ? { i: Math.floor(x / 588), m: Math.floor((x % 588) / 28), f: x % 28 } : null;
+  }
+  function hasHangul(text) { return /[가-힣]/.test(text); }
+  function romanizar(text) {
+    var ch = Array.from(text), syl = ch.map(syllable), out = '', carry = null;
+    for (var k = 0; k < ch.length; k++) {
+      var s = syl[k];
+      if (!s) { out += ch[k]; carry = null; continue; }
+      var prev = syl[k - 1];
+      var ini = carry !== null ? carry : INI[s.i];
+      if (carry === null && s.i === 5 && prev && (prev.f === 8 || prev.f === 4)) ini = 'l';
+      carry = null;
+      var coda = CODA[s.f], nx = syl[k + 1];
+      if (s.f && nx) {
+        if (nx.i === 11) { coda = LIG[s.f][0]; if (LIG[s.f][1]) carry = LIG[s.f][1]; }
+        else if (s.f === 27 && (nx.i === 0 || nx.i === 3 || nx.i === 12)) { coda = ''; carry = nx.i === 0 ? 'k' : nx.i === 3 ? 't' : 'ch'; }
+        else if (nx.i === 2 || nx.i === 6) { if (coda === 'k') coda = 'ng'; else if (coda === 'p') coda = 'm'; else if (coda === 't') coda = 'n'; }
+        else if (s.f === 4 && nx.i === 5) coda = 'l';
+      }
+      out += ini + MED[s.m] + coda;
+    }
+    return out;
+  }
+
+  // ---------- Lyrics: loaded from lrclib.net in her browser, never stored in this page ----------
+  var lyricsMem = {};
+  function parseLRC(text) {
+    var out = [];
+    String(text || '').split(/\r?\n/).forEach(function (raw) {
+      var rest = raw, times = [], m, re = /^\s*\[(\d+):(\d+(?:\.\d+)?)\]/;
+      while ((m = re.exec(rest))) { times.push(Number(m[1]) * 60 + Number(m[2])); rest = rest.slice(m[0].length); }
+      var line = rest.trim();
+      times.forEach(function (t) { out.push({ t: t, text: line }); });
+    });
+    out.sort(function (a, b) { return a.t - b.t; });
+    return out;
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function fetchLyrics(song) {
+    if (lyricsMem[song.slug]) return lyricsMem[song.slug];
+    var cacheKey = 'setlist-nico:letra:' + song.slug + ':' + song.lrclib[0];
+    try {
+      var cached = localStorage.getItem(cacheKey);
+      if (cached) { lyricsMem[song.slug] = parseLRC(cached); return lyricsMem[song.slug]; }
+    } catch (e) {}
+    // lrclib sometimes answers "busy": try a few copies of the same timing, with short pauses.
+    for (var round = 0; round < 3; round++) {
+      for (var k = 0; k < song.lrclib.length; k++) {
+        try {
+          var r = await fetch('https://lrclib.net/api/get/' + song.lrclib[k]);
+          if (r.ok) {
+            var j = await r.json();
+            if (j && j.syncedLyrics) {
+              try { localStorage.setItem(cacheKey, j.syncedLyrics); } catch (e) {}
+              lyricsMem[song.slug] = parseLRC(j.syncedLyrics);
+              return lyricsMem[song.slug];
+            }
+          }
+        } catch (e) {}
+        await wait(400);
+      }
+      await wait(1200 * (round + 1));
+    }
+    return null;
+  }
+  // The lyric line a dedication points at (if the lyrics loaded).
+  function lineFor(lines, d) {
+    if (!lines || d.fin) return -1;
+    var best = -1, bestGap = 1.6;
+    lines.forEach(function (l, i) {
+      var g = Math.abs(l.t - d.t);
+      if (l.text && g < bestGap) { best = i; bestGap = g; }
+    });
+    return best;
+  }
+
+  // ================= Ambient hearts and bursts =================
+  function heartPath(ctx, x, y, s) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + s * 0.3);
+    ctx.bezierCurveTo(x, y, x - s * 0.5, y, x - s * 0.5, y + s * 0.3);
+    ctx.bezierCurveTo(x - s * 0.5, y + s * 0.6, x, y + s * 0.8, x, y + s);
+    ctx.bezierCurveTo(x, y + s * 0.8, x + s * 0.5, y + s * 0.6, x + s * 0.5, y + s * 0.3);
+    ctx.bezierCurveTo(x + s * 0.5, y, x, y, x, y + s * 0.3);
+    ctx.fill();
+  }
+  function star(ctx, x, y, r) {
+    ctx.beginPath();
+    for (var i = 0; i < 10; i++) {
+      var a = Math.PI / 5 * i - Math.PI / 2, rr = i % 2 ? r * 0.45 : r;
+      ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+  function sizeCanvas(cv) {
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr);
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); return c;
+  }
+  var amb = $('#ambient'), actx = sizeCanvas(amb), floaters = [];
+  var FLOATERS = innerWidth < 600 ? 12 : 20;
+  function newFloater(anywhere) {
+    var cs = [tok('--petal'), tok('--petal-3'), tok('--lilac-soft'), tok('--rose')];
+    return { kind: Math.random() < 0.75 ? 'heart' : 'star', x: Math.random() * innerWidth,
+      y: anywhere ? Math.random() * innerHeight : innerHeight + 30, s: 8 + Math.random() * 13,
+      vy: 0.22 + Math.random() * 0.4, ph: Math.random() * 6, c: cs[Math.floor(Math.random() * cs.length)], a: 0.3 + Math.random() * 0.3 };
+  }
+  function ambientLoop() {
+    if (!document.hidden) {
+      actx.clearRect(0, 0, innerWidth, innerHeight);
+      for (var i = 0; i < floaters.length; i++) {
+        var f = floaters[i];
+        f.y -= f.vy; f.ph += 0.02;
+        if (f.y < -40) { floaters[i] = newFloater(false); continue; }
+        actx.globalAlpha = f.a; actx.fillStyle = f.c;
+        var x = f.x + Math.sin(f.ph) * 14;
+        if (f.kind === 'heart') heartPath(actx, x, f.y, f.s); else star(actx, x, f.y, f.s * 0.45);
+      }
+      actx.globalAlpha = 1;
+    }
+    requestAnimationFrame(ambientLoop);
+  }
+  if (!reduce) {
+    for (var fi = 0; fi < FLOATERS; fi++) floaters.push(newFloater(true));
+    requestAnimationFrame(ambientLoop);
+  }
+  var fx = $('#fx'), fctx = sizeCanvas(fx), bits = [], fxRunning = false;
+  function fxLoop() {
+    fctx.clearRect(0, 0, innerWidth, innerHeight);
+    bits = bits.filter(function (b) { return b.life > 0; });
+    bits.forEach(function (b) {
+      b.vy += b.g; b.x += b.vx; b.y += b.vy; b.life -= 1; b.rot += b.vr;
+      fctx.globalAlpha = Math.max(0, Math.min(1, b.life / 30));
+      fctx.fillStyle = b.c;
+      fctx.save(); fctx.translate(b.x, b.y); fctx.rotate(b.rot);
+      if (b.kind === 'heart') heartPath(fctx, 0, -b.s / 2, b.s); else star(fctx, 0, 0, b.s * 0.5);
+      fctx.restore();
+    });
+    fctx.globalAlpha = 1;
+    if (bits.length) requestAnimationFrame(fxLoop); else { fxRunning = false; fctx.clearRect(0, 0, innerWidth, innerHeight); }
+  }
+  function burst(x, y, n, o) {
+    if (reduce) return;
+    o = o || {};
+    var colors = [tok('--rose'), tok('--rose-deep'), tok('--lilac'), tok('--petal-3')];
+    for (var k = 0; k < n; k++) {
+      var ang = o.round ? Math.random() * Math.PI * 2 : -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.3;
+      var sp = (o.speed || 6) * (0.6 + Math.random() * 0.8);
+      bits.push({ x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, g: 0.12, s: (10 + Math.random() * 12) * (o.size || 1),
+        rot: (Math.random() - 0.5) * 0.6, vr: (Math.random() - 0.5) * 0.08, kind: Math.random() < 0.7 ? 'heart' : 'star',
+        c: colors[k % colors.length], life: (o.life || 90) * (0.8 + Math.random() * 0.4) });
+    }
+    if (!fxRunning) { fxRunning = true; requestAnimationFrame(fxLoop); }
+  }
+  function burstAt(el, n, o) { var r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, n, o); }
+  window.addEventListener('resize', function () { actx = sizeCanvas(amb); fctx = sizeCanvas(fx); });
+
+  // ================= Home: the setlist =================
+  var setlistEl = $('#setlist');
+  function songCount(song) {
+    return song.ded.filter(function (d) { return store.saved[dkey(song, d)]; }).length;
+  }
+  function renderSetlist() {
+    setlistEl.innerHTML = '';
+    SONGS.forEach(function (song, i) {
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'track-btn';
+      var got = songCount(song), full = got === song.ded.length;
+      b.innerHTML = '<span class="tb-n"></span><span class="thumb"></span><span class="tb-t"><strong></strong><span></span></span>' +
+        '<span class="tb-h' + (full ? ' full' : '') + '">' + heartSVG('') + '<span></span></span>';
+      b.querySelector('.tb-n').textContent = song.n;
+      fillThumb(b.querySelector('.thumb'), song);
+      b.querySelector('strong').textContent = song.title;
+      b.querySelector('.tb-t > span').textContent = song.artist + ' · ' + fmt(song.dur);
+      b.querySelector('.tb-h > span').textContent = got + '/' + song.ded.length;
+      b.setAttribute('aria-label', song.n + ': ' + song.title + ', ' + song.artist + '. ' + got + ' de ' + song.ded.length + ' dedicatorias guardadas.');
+      b.addEventListener('click', function () { openSong(i); });
+      li.appendChild(b);
+      setlistEl.appendChild(li);
+    });
+  }
+  renderSetlist();
+  $('#empezar').addEventListener('click', function () { openSong(0); });
+
+  function showView(id) {
+    document.querySelectorAll('.view.active').forEach(function (v) { v.classList.remove('active'); });
+    var v = document.getElementById(id);
+    retrigger(v, 'active');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    var h = v.querySelector('h1, h2');
+    if (h) h.focus({ preventScroll: true });
+  }
+
+  // ================= Players =================
+  // One clock for the lyrics, whatever is playing: the YouTube video or, as a fallback, a manual timer.
+  var cur = -1, source = null, videoQueue = [];
+  var yt = null, ytReady = false, ytWant = null, ytPending = [], ytLoading = false, ytLast = { v: 0, at: 0 }, ytPlaying = false, ytStarted = false;
+  var man = { running: false, base: 0, at: 0 };
+  var hintTimer = null;
+
+  function withYT(cb) {
+    if (window.YT && window.YT.Player) { cb(); return; }
+    ytPending.push(cb);
+    if (ytLoading) return;
+    ytLoading = true;
+    var s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = function () { ytLoading = false; ytPending = []; useManual('No se pudo cargar YouTube.', 'Revisa la conexión. Mientras, puedes ponerla donde quieras y seguir la letra con «Empezar la letra».'); };
+    document.head.appendChild(s);
+  }
+  window.onYouTubeIframeAPIReady = function () { var p = ytPending; ytPending = []; p.forEach(function (f) { f(); }); };
+
+  function playYT(id) {
+    ytStarted = false;
+    ytLast = { v: 0, at: performance.now() };
+    showHint(false);
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(function () { if (!ytStarted && source === 'yt') showHint(true); }, 2600);
+    withYT(function () {
+      if (!yt) {
+        yt = new YT.Player('yt', {
+          videoId: id, width: '100%', height: '100%',
+          playerVars: { autoplay: 1, playsinline: 1, rel: 0, iv_load_policy: 3, origin: location.origin },
+          events: {
+            onReady: function (e) {
+              ytReady = true;
+              if (ytWant && ytWant !== id) { e.target.loadVideoById(ytWant); ytWant = null; }
+              else if (source === 'yt') e.target.playVideo();
+            },
+            onStateChange: onYTState,
+            onError: onYTError
+          }
+        });
+      } else if (ytReady) {
+        yt.loadVideoById(id);
+      } else {
+        ytWant = id;
+      }
+    });
+  }
+  function onYTState(e) {
+    if (source !== 'yt') return;
+    ytPlaying = e.data === 1;
+    if (e.data === 1) { ytStarted = true; showHint(false); }
+    if (e.data === 0) songEnded();
+  }
+  function onYTError() {
+    if (source !== 'yt') return;
+    var next = videoQueue.shift();
+    if (next) { playYT(next); return; }
+    useManual('YouTube no deja poner este video aquí.', 'Ponla en YouTube o en Spotify y, cuando arranque, toca «Empezar la letra».');
+  }
+  function showHint(on) { $('#tap-hint').hidden = !on; }
+  function stopYT() { if (yt && ytReady) { try { yt.pauseVideo(); } catch (e) {} } ytPlaying = false; }
+
+  // If YouTube refuses every copy of a song, the lyrics can still run on a timer
+  // while she plays it somewhere else.
+  function useManual(title, text) {
+    source = 'manual';
+    stopYT();
+    showHint(false);
+    $('#alt').hidden = false;
+    $('#video-box').classList.add('is-alt');
+    $('#alt-title').textContent = title;
+    $('#alt-text').textContent = text;
+    $('#manual-ctrls').hidden = false;
+    resetManual();
+  }
+  function resetManual() {
+    man = { running: false, base: 0, at: 0 };
+    $('#m-start').textContent = 'Empezar la letra';
+    $('#m-pause').hidden = true;
+  }
+  function stopManual() { if (man.running) { man.base = manTime(); man.running = false; } }
+  function manTime() { return man.running ? man.base + (performance.now() - man.at) / 1000 : man.base; }
+  var counting = false;
+  $('#m-start').addEventListener('click', async function () {
+    if (counting) return;
+    var song = SONGS[cur];
+    if (source !== 'manual') source = 'manual';
+    var restart = man.base > 0 && !man.running;
+    if (!reduce) {
+      counting = true;
+      var cd = $('#countdown');
+      cd.hidden = false;
+      var nums = ['3', '2', '1'];
+      for (var k = 0; k < nums.length; k++) {
+        cd.innerHTML = '<span>' + nums[k] + '</span>';
+        await wait(900);
+        if (SONGS[cur] !== song) { cd.hidden = true; counting = false; return; }
+      }
+      cd.hidden = true; cd.innerHTML = '';
+      counting = false;
+    }
+    man = { running: true, base: restart ? man.base : 0, at: performance.now() };
+    lastT = man.base - 0.01;
+    $('#m-start').textContent = 'Empezar de nuevo';
+    $('#m-pause').hidden = false;
+    $('#m-pause').textContent = 'Pausar';
+  });
+  $('#m-pause').addEventListener('click', function () {
+    if (man.running) { stopManual(); this.textContent = 'Seguir'; }
+    else { man.running = true; man.at = performance.now(); this.textContent = 'Pausar'; }
+  });
+
+  // The current second of the song, as the lyrics see it.
+  function songTime() {
+    var song = SONGS[cur];
+    var adj = store.adj[song.slug] || 0;
+    var t = 0;
+    if (source === 'yt' && yt && ytReady && yt.getCurrentTime) {
+      var v = yt.getCurrentTime() || 0, now = performance.now();
+      if (v !== ytLast.v) ytLast = { v: v, at: now };
+      t = ytPlaying ? ytLast.v + Math.min(0.6, (now - ytLast.at) / 1000) : v;
+    } else if (source === 'manual') {
+      t = manTime();
+    }
+    return t + adj;
+  }
+  function isPlaying() {
+    if (source === 'yt') return ytPlaying;
+    if (source === 'manual') return man.running;
+    return false;
+  }
+  function songDuration() {
+    var song = SONGS[cur];
+    if (source === 'yt' && yt && ytReady && yt.getDuration) { var d = yt.getDuration(); if (d > 0) return d; }
+    return song.dur;
+  }
+  // `t` is lyrics time (the nudge included); the player gets its own time.
+  function seekTo(t) {
+    lastT = Math.max(0, t) - 0.05;
+    t = Math.max(0, t - (store.adj[SONGS[cur].slug] || 0));
+    if (source === 'yt' && yt && ytReady) { yt.seekTo(t, true); ytLast = { v: t, at: performance.now() }; if (!ytPlaying) yt.playVideo(); }
+    else if (source === 'manual') { man.base = t; man.at = performance.now(); }
+  }
+
+  // ================= One song =================
+  var lyricsEl = $('#lyrics'), lines = null, lineEls = [], curLine = -2, lastT = -1, userScrollAt = 0, endTimer = null;
+
+  function openSong(i) {
+    if (i < 0 || i >= SONGS.length) return;
+    closeFlash(false);
+    clearTimeout(endTimer);
+    flashQueue = []; queued = {}; pendingNext = null;
+    var song = SONGS[i];
+    cur = i;
+    lastT = -1; curLine = -2; lines = null; lineEls = [];
+    showView('v-song');
+    $('#s-count').textContent = (i + 1) + ' de ' + SONGS.length + ' · ' + song.title;
+    $('#s-title').textContent = song.title;
+    $('#s-artist').textContent = song.artist + ' · ' + song.album + ' · ' + song.year;
+    fillThumb($('#s-thumb'), song);
+    var kl = KIND_LABEL[song.kind];
+    $('#s-badges').innerHTML = '<span class="badge ' + kl[1] + '"></span>';
+    $('#s-badges .badge').textContent = kl[0];
+    $('#prev').disabled = i === 0;
+    $('#next').textContent = i === SONGS.length - 1 ? 'Terminar' : 'Siguiente';
+    updateAdj();
+    renderMarks();
+
+    // Player
+    $('#alt').hidden = true;
+    $('#video-box').classList.remove('is-alt');
+    $('#manual-ctrls').hidden = true;
+    resetManual();
+    source = 'yt';
+    videoQueue = song.backups.slice();
+    playYT(song.video);
+
+    // Lyrics
+    lyricsEl.innerHTML = '';
+    lyricsEl.scrollTop = 0;
+    setStatus('Cargando la letra…');
+    fetchLyrics(song).then(function (got) {
+      if (SONGS[cur] !== song) return;
+      if (!got) {
+        setStatus('La letra no cargó ahora: el servidor de letras está ocupado. La canción suena igual y tus dedicatorias también llegan.', true);
+        return;
+      }
+      setStatus('');
+      lines = got;
+      renderLyrics(song);
+      // Get the next song's lyrics ready.
+      if (SONGS[cur + 1]) fetchLyrics(SONGS[cur + 1]);
+    });
+  }
+  function setStatus(text, retry) {
+    var el = $('#l-status');
+    el.textContent = text;
+    if (retry) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'link'; b.textContent = 'Reintentar';
+      b.addEventListener('click', function () {
+        var song = SONGS[cur];
+        setStatus('Cargando la letra…');
+        fetchLyrics(song).then(function (got) {
+          if (SONGS[cur] !== song) return;
+          if (!got) { setStatus('Sigue sin cargar. Prueba en un ratito.', true); return; }
+          setStatus(''); lines = got; renderLyrics(song);
+        });
+      });
+      el.appendChild(document.createTextNode(' '));
+      el.appendChild(b);
+    }
+  }
+  function renderLyrics(song) {
+    lyricsEl.innerHTML = '';
+    lineEls = [];
+    var dedAt = {};
+    song.ded.forEach(function (d) { var k = lineFor(lines, d); if (k >= 0) dedAt[k] = d; });
+    lines.forEach(function (l, k) {
+      var li = document.createElement('li');
+      li.className = 'ly';
+      if (!l.text) {
+        li.classList.add('gap');
+        li.textContent = '♪';
+        li.setAttribute('aria-hidden', 'true');
+      } else {
+        var t = document.createElement('span');
+        t.className = 'ly-txt'; t.textContent = l.text;
+        if (hasHangul(l.text)) t.lang = 'ko';
+        li.appendChild(t);
+        if (hasHangul(l.text)) {
+          var r = document.createElement('span');
+          r.className = 'ly-rom'; r.textContent = romanizar(l.text);
+          li.appendChild(r);
+        }
+        var d = dedAt[k];
+        if (d) {
+          li.classList.add('ded');
+          li.dataset.key = dkey(song, d);
+          if (store.saved[li.dataset.key]) li.classList.add('got');
+          li.insertAdjacentHTML('beforeend', heartSVG('heart'));
+        }
+        li.addEventListener('click', function () { seekTo(l.t - 0.3); });
+      }
+      lyricsEl.appendChild(li);
+      lineEls.push(li);
+    });
+    curLine = -2;
+  }
+  $('#rom').setAttribute('aria-pressed', String(store.rom));
+  lyricsEl.classList.toggle('no-rom', !store.rom);
+  $('#rom').addEventListener('click', function () {
+    store.rom = !store.rom; persist();
+    this.setAttribute('aria-pressed', String(store.rom));
+    lyricsEl.classList.toggle('no-rom', !store.rom);
+    curLine = -2;
+  });
+  ['wheel', 'touchmove'].forEach(function (ev) {
+    lyricsEl.addEventListener(ev, function () { userScrollAt = performance.now(); }, { passive: true });
+  });
+
+  function highlight(t) {
+    if (!lines || !lineEls.length) return;
+    var idx = -1;
+    for (var k = 0; k < lines.length; k++) { if (lines[k].t <= t + 0.12) idx = k; else break; }
+    if (idx === curLine) return;
+    curLine = idx;
+    for (var j = 0; j < lineEls.length; j++) {
+      var c = lineEls[j].classList;
+      c.toggle('past', j < idx);
+      c.toggle('now', j === idx);
+      c.toggle('next', j === idx + 1);
+    }
+    if (performance.now() - userScrollAt < 3500) return;
+    var target = lineEls[Math.max(0, idx)];
+    if (!target) return;
+    var top = target.offsetTop - lyricsEl.clientHeight * 0.36;
+    lyricsEl.scrollTo({ top: Math.max(0, top), behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  // Timeline with a heart where each dedication is.
+  var tl = $('#timeline');
+  function renderMarks() {
+    tl.querySelectorAll('.mark').forEach(function (m) { m.remove(); });
+    var song = SONGS[cur], dur = song.dur;
+    song.ded.forEach(function (d) {
+      var m = document.createElement('span');
+      m.className = 'mark' + (store.saved[dkey(song, d)] ? ' got' : '');
+      m.dataset.key = dkey(song, d);
+      m.style.left = Math.min(98, d.t / dur * 100) + '%';
+      m.innerHTML = heartSVG('');
+      tl.appendChild(m);
+    });
+  }
+  function tlSeek(clientX) {
+    var r = tl.getBoundingClientRect();
+    var p = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+    seekTo(p * songDuration() + (store.adj[SONGS[cur].slug] || 0));
+  }
+  tl.addEventListener('pointerdown', function (e) { tlSeek(e.clientX); });
+  tl.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    seekTo(songTime() + (e.key === 'ArrowRight' ? 5 : -5));
+  });
+
+  // Timing nudge, in quarter seconds, remembered per song.
+  function updateAdj() {
+    var a = store.adj[SONGS[cur].slug] || 0;
+    $('#adj-out').textContent = a === 0 ? 'a tiempo' : (a > 0 ? '+' : '−') + Math.abs(a).toFixed(2).replace('.', ',') + ' s';
+  }
+  function nudge(delta) {
+    var s = SONGS[cur].slug;
+    store.adj[s] = Math.round(((store.adj[s] || 0) + delta) * 4) / 4;
+    if (store.adj[s] === 0) delete store.adj[s];
+    persist(); updateAdj(); curLine = -2;
+  }
+  $('#adj-plus').addEventListener('click', function () { nudge(0.25); });
+  $('#adj-minus').addEventListener('click', function () { nudge(-0.25); });
+
+  function songEnded() {
+    clearTimeout(endTimer);
+    var i = cur;
+    if (i < SONGS.length - 1) {
+      toast('Sigue: ' + SONGS[i + 1].title);
+      endTimer = setTimeout(function () { if (cur === i && !flashOn) openSong(i + 1); else if (cur === i) pendingNext = i + 1; }, 3200);
+    } else {
+      endTimer = setTimeout(function () { openSheet(true); }, 1800);
+    }
+  }
+  var pendingNext = null;
+
+  $('#volver').addEventListener('click', goHome);
+  function goHome() {
+    closeFlash(false);
+    clearTimeout(endTimer);
+    stopYT(); stopManual();
+    source = null; cur = -1;
+    renderSetlist();
+    showView('v-home');
+  }
+  $('#prev').addEventListener('click', function () { if (cur > 0) openSong(cur - 1); });
+  $('#next').addEventListener('click', function () {
+    if (cur < SONGS.length - 1) openSong(cur + 1);
+    else { stopYT(); stopManual(); openSheet(true); }
+  });
+
+  // ================= The loop =================
+  var wasHidden = false;
+  document.addEventListener('visibilitychange', function () { if (document.hidden) wasHidden = true; });
+  function tick() {
+    if (cur >= 0 && source) {
+      var song = SONGS[cur], t = songTime(), dur = songDuration();
+      $('#tl-fill').style.width = Math.min(100, Math.max(0, t / dur * 100)) + '%';
+      tl.setAttribute('aria-valuenow', String(Math.round(t / dur * 100)));
+      tl.setAttribute('aria-valuetext', fmt(t) + ' de ' + fmt(dur));
+      $('#t-cur').textContent = fmt(t);
+      $('#t-dur').textContent = fmt(dur);
+      highlight(t);
+      if (isPlaying() && lastT >= 0) {
+        var jumpOk = t - lastT < 4 || wasHidden;
+        song.ded.forEach(function (d) {
+          var k = dkey(song, d);
+          if (store.saved[k] || queued[k]) return;
+          if (lastT < d.t && t >= d.t && jumpOk) { queued[k] = true; flashQueue.push({ song: song, d: d }); }
+        });
+      }
+      if (isPlaying()) { lastT = t; wasHidden = false; }
+      else if (lastT < 0) lastT = t;
+      if (!flashOn && flashQueue.length) openFlash(flashQueue.shift());
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ================= Flashback =================
+  var flashQueue = [], queued = {}, flashOn = null, flashTimer = null;
+  function openFlash(item) {
+    var song = item.song, d = item.d;
+    flashOn = item;
+    var src = lyricsMem[song.slug], k = lineFor(src, d);
+    var verse = k >= 0 ? src[k].text : '';
+    $('#fl-where').textContent = song.title + ' · ' + fmt(d.t);
+    $('#fl-line').textContent = verse;
+    $('#fl-line').hidden = !verse;
+    $('#fl-line').lang = hasHangul(verse) ? 'ko' : 'en';
+    $('#fl-rom').textContent = verse && hasHangul(verse) ? romanizar(verse) : '';
+    $('#fl-rom').hidden = !(verse && hasHangul(verse));
+    $('#fl-idea').textContent = d.idea || '';
+    $('#fl-kr').textContent = d.kr || '';
+    $('#fl-kr').hidden = !d.kr;
+    $('#fl-frase').textContent = d.frase;
+    $('#flash').hidden = false;
+    if (!reduce) setTimeout(function () { burstAt($('#flash-card'), 24, { round: true, speed: 5, size: 0.7, life: 70 }); }, 450);
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(function () { closeFlash(true); }, reduce ? 9000 : 7500);
+  }
+  function closeFlash(save) {
+    clearTimeout(flashTimer);
+    if (!flashOn) return;
+    var item = flashOn;
+    flashOn = null;
+    var card = $('#flash-card');
+    var from = card.getBoundingClientRect();
+    $('#flash').hidden = true;
+    if (save) saveDed(item, from);
+    else delete queued[dkey(item.song, item.d)];
+    if (pendingNext !== null && save) { var n = pendingNext; pendingNext = null; setTimeout(function () { if (cur === n - 1) openSong(n); }, 800); }
+  }
+  $('#fl-save').addEventListener('click', function () { closeFlash(true); });
+  $('#flash-bg').addEventListener('click', function () { closeFlash(true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (flashOn) closeFlash(true);
+    else if (!$('#sheet').hidden) closeSheet();
+  });
+
+  function saveDed(item, fromRect) {
+    var k = dkey(item.song, item.d);
+    if (store.saved[k]) return;
+    store.saved[k] = Date.now();
+    persist();
+    delete queued[k];
+    var pocket = $('#pocket');
+    function done() {
+      updatePocket();
+      retrigger(pocket, 'bump');
+      burstAt(pocket.querySelector('.env'), 14, { round: true, speed: 3.5, size: 0.55, life: 55 });
+      document.querySelectorAll('[data-key="' + k + '"]').forEach(function (el) { el.classList.add('got'); });
+    }
+    var g = document.createElement('div');
+    g.className = 'ghost';
+    g.textContent = item.d.frase;
+    if (reduce || !g.animate || !fromRect || !fromRect.width) { done(); return; }
+    g.style.left = (fromRect.left + 16) + 'px';
+    g.style.top = (fromRect.top + fromRect.height * 0.45) + 'px';
+    document.body.appendChild(g);
+    var a = g.getBoundingClientRect(), dst = pocket.querySelector('.env').getBoundingClientRect();
+    var sc = Math.max(0.1, Math.min(1, dst.width / a.width));
+    var dx = dst.left + dst.width / 2 - a.left - a.width * sc / 2;
+    var dy = dst.top + dst.height / 2 - a.top - a.height * sc / 2;
+    var anim = g.animate([
+      { transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
+      { transform: 'translate(' + dx * 0.4 + 'px,' + (dy * 0.4 - 60) + 'px) scale(' + (1 + sc) / 2 + ') rotate(-8deg)', opacity: 1, offset: 0.55 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sc + ') rotate(0deg)', opacity: 0.2 }
+    ], { duration: 1100, easing: 'cubic-bezier(.45,0,.2,1)' });
+    anim.onfinish = function () { g.remove(); done(); };
+  }
+
+  // ================= Tu rincón =================
+  function updatePocket() {
+    var n = savedCount();
+    $('#pocket-count').textContent = n + ' de ' + TOTAL + ' dedicatorias';
+    $('#pocket').setAttribute('aria-label', 'Tu rincón: ' + n + ' de ' + TOTAL + ' dedicatorias guardadas');
+  }
+  updatePocket();
+  $('#pocket').addEventListener('click', function () { openSheet(false); });
+  $('#sheet-close').addEventListener('click', closeSheet);
+  $('#sheet').addEventListener('click', function (e) { if (e.target === this) closeSheet(); });
+  var sheetReturn = null;
+
+  function openSheet(final) {
+    sheetReturn = document.activeElement;
+    var n = savedCount();
+    $('#sheet-title').textContent = final ? 'Todo lo que te dediqué' : 'Tu rincón';
+    $('#sheet-sub').textContent = n === TOTAL
+      ? 'Las encontraste todas. Toca cada tarjeta para darle la vuelta.'
+      : n + ' de ' + TOTAL + ' dedicatorias. Toca una tarjeta para darle la vuelta; las que faltan te dicen dónde están.';
+    $('#sheet-foot').hidden = !(final || n === TOTAL);
+    var cards = $('#cards');
+    cards.innerHTML = '';
+    var num = 0;
+    SONGS.forEach(function (song, si) {
+      song.ded.forEach(function (d) {
+        num++;
+        var k = dkey(song, d);
+        if (store.saved[k]) cards.appendChild(memoCard(song, d, num));
+        else cards.appendChild(lockedCard(song, d, si));
+      });
+    });
+    $('#sheet').hidden = false;
+    $('#sheet-panel').scrollTop = 0;
+    $('#sheet-title').focus({ preventScroll: true });
+    if (final && !reduce) {
+      var shots = 0;
+      var timer = setInterval(function () {
+        burst(innerWidth * (0.15 + Math.random() * 0.7), innerHeight * (0.2 + Math.random() * 0.35), 30, { round: true, speed: 6 });
+        if (++shots >= 6) clearInterval(timer);
+      }, 550);
+    }
+  }
+  function closeSheet() {
+    $('#sheet').hidden = true;
+    if (cur < 0) renderSetlist();
+    if (sheetReturn && sheetReturn.focus) sheetReturn.focus({ preventScroll: true });
+  }
+  function memoCard(song, d, num) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'memo'; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = '<span class="memo-inner"><span class="memo-front"><span class="memo-n"></span><span class="memo-kr" lang="ko"></span><span class="memo-frase"></span><span class="memo-sign">Gio</span></span>' +
+      '<span class="memo-back"><small></small><strong></strong><span class="verso"></span><span class="idea"></span></span></span>';
+    b.querySelector('.memo-n').textContent = 'Dedicatoria ' + num;
+    var kr = b.querySelector('.memo-kr');
+    if (d.kr) kr.textContent = d.kr; else kr.remove();
+    b.querySelector('.memo-frase').textContent = d.frase;
+    b.querySelector('.memo-back small').textContent = song.n + ' · ' + fmt(d.t);
+    b.querySelector('.memo-back strong').textContent = song.title;
+    var k = lineFor(lyricsMem[song.slug], d);
+    var verse = k >= 0 ? lyricsMem[song.slug][k].text : '';
+    var v = b.querySelector('.verso');
+    if (verse) { v.textContent = verse; if (hasHangul(verse)) v.lang = 'ko'; } else v.remove();
+    b.querySelector('.idea').textContent = d.idea || '';
+    b.setAttribute('aria-label', d.frase + '. De ' + song.title + '. Toca para dar la vuelta.');
+    b.addEventListener('click', function () { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); });
+    return b;
+  }
+  function lockedCard(song, d, si) {
+    var div = document.createElement('div');
+    div.className = 'locked';
+    div.innerHTML = '<strong>Todavía no llega</strong><span></span><button class="btn small" type="button">Ir a escucharla</button>';
+    div.querySelector('span').textContent = 'Está en ' + song.title + ', en el minuto ' + fmt(d.t) + '.';
+    div.querySelector('button').addEventListener('click', function () {
+      closeSheet();
+      if (cur !== si) openSong(si);
+      var wanted = d.t - 6;
+      var tries = 0;
+      // Wait until the player can seek, then jump a few seconds before the line.
+      (function go() {
+        if (cur !== si) return;
+        if ((source === 'yt' && ytReady && ytStarted) || source === 'manual') { if (source !== 'manual' || man.running) seekTo(Math.max(0, wanted)); return; }
+        if (++tries < 40) setTimeout(go, 250);
+      })();
+    });
+    return div;
+  }
+})();
+</script>
+<noscript><p style="padding:2rem; text-align:center">Esta página necesita JavaScript para sonar.</p></noscript>
+</body>
+</html>
